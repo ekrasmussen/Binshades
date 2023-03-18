@@ -22,6 +22,7 @@ pub fn fill_image(mut image: ImageBuffer<image::Luma<u8>, Vec<u8>>, color: image
 pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
 {
     let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
+    let filename = format!("output{}.png", id.to_string());
     println!("GRIDX: {}", GRIDX);
     println!("GRIDY: {}", GRIDY);
     for x in 0..colors.len() {
@@ -38,5 +39,5 @@ pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
         }
     }
 
-    image.save("testoutput.png").unwrap();
+    image.save(filename).unwrap();
 }
