@@ -1,5 +1,6 @@
 extern crate image;
 
+mod imgedit;
 use image::{ImageBuffer};
 use std::env;
 use std::fs::File;
