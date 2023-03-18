@@ -9,7 +9,7 @@ use std::io::Write;
 
 const WIDTH: usize = 1920;
 const HEIGHT: usize = 1080;
-const BLOCK_SIZE: usize = 48;
+const BLOCK_SIZE: usize = 12;
 
 const GRIDX: usize = WIDTH / BLOCK_SIZE;
 const GRIDY: usize = HEIGHT / BLOCK_SIZE;
@@ -42,8 +42,9 @@ fn main() {
         // let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
         // image = imgedit::fill_image(image, image::Luma([255u8]));
         // image.save("output.png").unwrap();
-
-        imgedit::create_image(image_values[0], 0);
+        for i in 0..image_values.len() {
+            imgedit::create_image(image_values[i], i);
+        }
     }
 }
 
