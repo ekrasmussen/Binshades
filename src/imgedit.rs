@@ -24,8 +24,14 @@ pub fn fill_image(mut image: ImageBuffer<image::Luma<u8>, Vec<u8>>, color: image
 
 pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
 {
+    //Create the subdirectory
+    let dir_path = Path::new("output");
+    create_dir_all(dir_path);
+    
     let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
     let filename = format!("outputbw{}.png", id.to_string());
+    let image_path = dir_path.join(filename);
+
     println!("GRIDX: {}", GRIDX);
     println!("GRIDY: {}", GRIDY);
     for x in 0..colors.len() {
@@ -41,7 +47,7 @@ pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
         }
     }
 
-    image.save(filename).unwrap();
+    image.save(&image_path).unwrap();
 }
 
 pub fn create_image_colored(colors: [[[u8; 3]; GRIDY]; GRIDX], id: usize) {
