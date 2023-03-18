@@ -7,8 +7,8 @@ use std::fs::File;
 use std::io::Read;
 use std::io::Write;
 
-const WIDTH: usize = 48;
-const HEIGHT: usize = 24;
+const WIDTH: usize = 1920;
+const HEIGHT: usize = 1080;
 const BLOCK_SIZE: usize = 12;
 
 const GRIDX: usize = WIDTH / BLOCK_SIZE;
@@ -34,14 +34,16 @@ fn main() {
         println!("{:?}", binary_data);
         println!("{}", binary_data.len());
 
-        let mut theVector = generate_image_filestream(binary_data);
-        println!("Total amount of images: {}", theVector.len());
+        let mut image_values = generate_image_filestream(binary_data);
+        println!("Total amount of images: {}", image_values.len());
 
-        print_image_as_text(&theVector[1]);
+        print_image_as_text(&image_values[0]);
 
-        let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
-        image = imgedit::fill_image(image, image::Luma([255u8]));
-        image.save("output.png").unwrap();
+        // let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
+        // image = imgedit::fill_image(image, image::Luma([255u8]));
+        // image.save("output.png").unwrap();
+
+        imgedit::create_image(image_values[0], 0);
     }
 }
 
@@ -69,8 +71,8 @@ fn generate_image_filestream(mut data: Vec<u8>) -> Vec<[[u8; GRIDY]; GRIDX]> {
                     array[x][y] = data[index];
                     index += 1;
                 } else {
-                    for y in x..GRIDY {
-                        for x in y..GRIDX {
+                    for y in y..GRIDY {
+                        for x in x..GRIDX {
                             array[x][y] = 255;
                         }
                     }
