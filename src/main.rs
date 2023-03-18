@@ -11,8 +11,8 @@ use std::path::Path;
 use std::thread;
 use std::time::Instant;
 
-const WIDTH: usize = 3840;
-const HEIGHT: usize = 2160;
+const WIDTH: usize = 1920;
+const HEIGHT: usize = 1080;
 const BLOCK_SIZE: usize = 12;
 const THREADS: usize = 4;
 
