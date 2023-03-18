@@ -6,15 +6,14 @@ use std::env;
 use std::fs::File;
 use std::io::Read;
 use std::io::Write;
+use std::fs;
 
-const WIDTH: usize = 1920;
-const HEIGHT: usize = 1080;
+const WIDTH: usize = 3840;
+const HEIGHT: usize = 2160;
 const BLOCK_SIZE: usize = 12;
 
 const GRIDX: usize = WIDTH / BLOCK_SIZE;
 const GRIDY: usize = HEIGHT / BLOCK_SIZE;
-
-
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -30,21 +29,21 @@ fn main() {
             }
         };
         
-        println!("Buffer: ");
-        println!("{:?}", binary_data);
-        println!("{}", binary_data.len());
+        // println!("Buffer: ");
+        // println!("{:?}", binary_data);
+        // println!("{}", binary_data.len());
 
-        let mut image_values = generate_image_filestream(binary_data);
+        let mut image_values = generate_image_filestream_colored(binary_data);
         println!("Total amount of images: {}", image_values.len());
 
-        print_image_as_text(&image_values[0]);
+        //print_image_as_text(&image_values[0]);
 
         // let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
         // image = imgedit::fill_image(image, image::Luma([255u8]));
         // image.save("output.png").unwrap();
-        for i in 0..image_values.len() {
-            imgedit::create_image(image_values[i], i);
-        }
+        // for i in 0..image_values.len() {
+        //     imgedit::create_image(image_values[i], i);
+        // }
     }
 }
 
@@ -79,6 +78,37 @@ fn generate_image_filestream(mut data: Vec<u8>) -> Vec<[[u8; GRIDY]; GRIDX]> {
                     }
                     arrays.push(array);
                     return arrays;
+                }
+            }
+        }
+        arrays.push(array);
+    }
+    arrays
+}
+
+fn generate_image_filestream_colored(mut data: Vec<u8>) -> Vec<[[[u8; 3]; GRIDY]; GRIDX]> {
+    let mut arrays = Vec::new();
+    let mut index = 0;
+    while index < data.len() {
+        let mut array = [[[255; 3]; GRIDY]; GRIDX];
+        for y in 0..GRIDY {
+            for x in 0..GRIDX {
+                for c in 0..3 {
+                    if index < data.len() {
+                        array[x][y][c] = data[index];
+                        index += 1;
+                    } else {
+                        for y in y..GRIDY {
+                            for x in x..GRIDX {
+                                for c in c..3 {
+                                    array[x][y][c] = 255;
+                                }
+                            }
+                        }
+
+                        arrays.push(array);
+                        return arrays;
+                    }
                 }
             }
         }
