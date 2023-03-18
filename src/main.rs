@@ -28,6 +28,10 @@ fn main() {
                 return;
             }
         };
+
+        let mut image = ImageBuffer::new(WIDTH, HEIGHT);
+        image = imgedit::fill_image(image, image::Luma([255u8]));
+        image.save("output.png").unwrap();
     }
 }
 
