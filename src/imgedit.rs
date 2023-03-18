@@ -2,7 +2,7 @@ use image::{ImageBuffer};
 
 const WIDTH: usize = 3840;
 const HEIGHT: usize = 2160;
-const BLOCK_SIZE: usize = 12;
+const BLOCK_SIZE: usize = 48;
 
 const GRIDX: usize = WIDTH / BLOCK_SIZE;
 const GRIDY: usize = HEIGHT / BLOCK_SIZE;
@@ -22,7 +22,7 @@ pub fn fill_image(mut image: ImageBuffer<image::Luma<u8>, Vec<u8>>, color: image
 pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
 {
     let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
-    let filename = format!("output{}.png", id.to_string());
+    let filename = format!("outputbw{}.png", id.to_string());
     println!("GRIDX: {}", GRIDX);
     println!("GRIDY: {}", GRIDY);
     for x in 0..colors.len() {
@@ -33,6 +33,28 @@ pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
             for dx in 0..BLOCK_SIZE {
                 for dy in 0..BLOCK_SIZE {
                     image.put_pixel(dx as u32 + startx as u32, dy as u32 + starty as u32, image::Luma([colors[x][y]]));
+                }
+            }
+            //println!("Printed a field!");
+        }
+    }
+
+    image.save(filename).unwrap();
+}
+
+pub fn create_image_colored(colors: [[[u8; 3]; GRIDY]; GRIDX], id: usize) {
+    let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
+    let filename = format!("outputcolor{}.png", id.to_string());
+    println!("GRIDX: {}", GRIDX);
+    println!("GRIDY: {}", GRIDY);
+    for x in 0..colors.len() {
+        for y in 0..colors[0].len() {
+            let startx = x * BLOCK_SIZE;
+            let starty = y * BLOCK_SIZE;
+
+            for dx in 0..BLOCK_SIZE {
+                for dy in 0..BLOCK_SIZE {
+                    image.put_pixel(dx as u32 + startx as u32, dy as u32 + starty as u32, image::Rgb([colors[x][y][0], colors[x][y][1], colors[x][y][2]]));
                 }
             }
             //println!("Printed a field!");

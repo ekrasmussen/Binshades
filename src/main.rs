@@ -10,7 +10,7 @@ use std::fs;
 
 const WIDTH: usize = 3840;
 const HEIGHT: usize = 2160;
-const BLOCK_SIZE: usize = 12;
+const BLOCK_SIZE: usize = 48;
 
 const GRIDX: usize = WIDTH / BLOCK_SIZE;
 const GRIDY: usize = HEIGHT / BLOCK_SIZE;
@@ -33,7 +33,7 @@ fn main() {
         // println!("{:?}", binary_data);
         // println!("{}", binary_data.len());
 
-        let mut image_values = generate_image_filestream_colored(binary_data);
+        let mut image_values = generate_image_filestream(binary_data);
         println!("Total amount of images: {}", image_values.len());
 
         //print_image_as_text(&image_values[0]);
@@ -41,9 +41,9 @@ fn main() {
         // let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
         // image = imgedit::fill_image(image, image::Luma([255u8]));
         // image.save("output.png").unwrap();
-        // for i in 0..image_values.len() {
-        //     imgedit::create_image(image_values[i], i);
-        // }
+        for i in 0..image_values.len() {
+            imgedit::create_image(image_values[i], i);
+        }
     }
 }
 
