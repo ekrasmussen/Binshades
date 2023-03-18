@@ -2,7 +2,7 @@ use image::{ImageBuffer};
 
 const WIDTH: usize = 3840;
 const HEIGHT: usize = 2160;
-const BLOCK_SIZE: usize = 48;
+const BLOCK_SIZE: usize = 12;
 
 const GRIDX: usize = WIDTH / BLOCK_SIZE;
 const GRIDY: usize = HEIGHT / BLOCK_SIZE;
