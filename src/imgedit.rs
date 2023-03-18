@@ -2,7 +2,7 @@ use image::{ImageBuffer};
 
 const WIDTH: usize = 1920;
 const HEIGHT: usize = 1080;
-const BLOCK_SIZE: usize = 12;
+const BLOCK_SIZE: usize = 48;
 
 const GRIDX: usize = WIDTH / BLOCK_SIZE;
 const GRIDY: usize = HEIGHT / BLOCK_SIZE;
@@ -31,22 +31,12 @@ pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
 
             for dx in 0..BLOCK_SIZE {
                 for dy in 0..BLOCK_SIZE {
-                    //println!("x: {}" , x);
-                    //println!("y: {}", y);
-                    //println!("dx: {}" , dx);
-                    //println!("dy: {}", dy);
                     image.put_pixel(dx as u32 + startx as u32, dy as u32 + starty as u32, image::Luma([colors[x][y]]));
-                    //println!("Printed a pixel!");
                 }
             }
-            println!("Printed a field!");
+            //println!("Printed a field!");
         }
     }
 
-    // for x in 0..GRIDX {
-    //     for y in 0..GRIDY {
-    //         image.put_pixel(x as u32, y as u32, image::Luma([colors[x][y]]));
-    //     }
-    // }
     image.save("testoutput.png").unwrap();
 }
