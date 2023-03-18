@@ -7,7 +7,9 @@ use std::fs::File;
 use std::io::Read;
 use std::io::Write;
 use std::fs;
+use std::path::Path;
 use std::thread;
+use std::time::Instant;
 
 const WIDTH: usize = 3840;
 const HEIGHT: usize = 2160;
@@ -18,11 +20,12 @@ const GRIDX: usize = WIDTH / BLOCK_SIZE;
 const GRIDY: usize = HEIGHT / BLOCK_SIZE;
 
 fn main() {
+    let now = Instant::now();
     let args: Vec<String> = env::args().collect();
-
     for i in 1..args.len() {
         println!("File: {}", args[i]);
 
+        //Convert to binary
         let binary_data = match convert_to_binary(&args[i]) {
             Ok(data) => data,
             Err(e) => {
@@ -30,19 +33,9 @@ fn main() {
                 return;
             }
         };
-        
-        // println!("Buffer: ");
-        // println!("{:?}", binary_data);
-        // println!("{}", binary_data.len());
 
         let mut image_values = generate_image_filestream_colored(binary_data);
         println!("Total amount of images: {}", image_values.len());
-
-        //print_image_as_text(&image_values[0]);
-
-        // let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
-        // image = imgedit::fill_image(image, image::Luma([255u8]));
-        // image.save("output.png").unwrap();
 
         let chunk_size = image_values.len() / THREADS;
         let remainder = image_values.len() % THREADS;
@@ -64,11 +57,6 @@ fn main() {
                 }
             });
 
-            // let thread_handle = thread::spawn(move ||{ 
-            //     for value in values_chunk {
-            //         imgedit::create_image_colored(value, start);
-            //     }
-            // });
             threads.push(thread_handle);
 
             start = end;
@@ -83,6 +71,13 @@ fn main() {
         //     imgedit::create_image_colored(image_values[i], i);
         // }
     }
+
+    let elapsed = now.elapsed();
+    println!("Elapsed: {:.2?}", elapsed);
+}
+
+fn create_directory(path: &str) -> Result<(), std::io::Error> {
+    fs::create_dir_all(path)
 }
 
 fn convert_to_binary(path: &str) -> Result<Vec<u8>, std::io::Error> {

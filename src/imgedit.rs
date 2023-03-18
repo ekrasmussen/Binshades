@@ -1,4 +1,7 @@
 use image::{ImageBuffer};
+use std::fs::create_dir_all;
+use std::path::Path;
+
 
 const WIDTH: usize = 3840;
 const HEIGHT: usize = 2160;
@@ -35,7 +38,6 @@ pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
                     image.put_pixel(dx as u32 + startx as u32, dy as u32 + starty as u32, image::Luma([colors[x][y]]));
                 }
             }
-            //println!("Printed a field!");
         }
     }
 
@@ -43,8 +45,13 @@ pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
 }
 
 pub fn create_image_colored(colors: [[[u8; 3]; GRIDY]; GRIDX], id: usize) {
+    //Create the subdirectory
+    let dir_path = Path::new("output");
+    create_dir_all(dir_path);
+    
     let mut image = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
     let filename = format!("outputcolor{}.png", id.to_string());
+    let image_path = dir_path.join(filename);
     println!("GRIDX: {}", GRIDX);
     println!("GRIDY: {}", GRIDY);
     for x in 0..colors.len() {
@@ -57,9 +64,8 @@ pub fn create_image_colored(colors: [[[u8; 3]; GRIDY]; GRIDX], id: usize) {
                     image.put_pixel(dx as u32 + startx as u32, dy as u32 + starty as u32, image::Rgb([colors[x][y][0], colors[x][y][1], colors[x][y][2]]));
                 }
             }
-            //println!("Printed a field!");
         }
     }
 
-    image.save(filename).unwrap();
+    image.save(&image_path).unwrap();
 }
