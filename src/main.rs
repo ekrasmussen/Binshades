@@ -5,6 +5,7 @@ use image::{ImageBuffer};
 use std::env;
 use std::fs::File;
 use std::io::Read;
+use std::io::Write;
 
 const WIDTH: u32 = 1920;
 const HEIGHT: u32 = 1080;
@@ -28,6 +29,11 @@ fn main() {
                 return;
             }
         };
+        
+        println!("Buffer: ");
+        println!("{:?}", binary_data);
+
+        //convert_to_text("result.txt", &binary_data).unwrap();
 
         let mut image = ImageBuffer::new(WIDTH, HEIGHT);
         image = imgedit::fill_image(image, image::Luma([255u8]));
@@ -40,4 +46,10 @@ fn convert_to_binary(path: &str) -> Result<Vec<u8>, std::io::Error> {
     let mut buffer = Vec::new();
     file.read_to_end(&mut buffer)?;
     Ok(buffer)
+}
+
+fn convert_to_text(path: &str, data: &[u8]) -> Result<(), std::io::Error> {
+    let mut file = File::create(path)?;
+    file.write_all(data)?;
+    Ok(())
 }
