@@ -34,8 +34,7 @@ fn main() {
             }
         };
 
-        let mut image_values = generate_image_filestream(binary_data);
-        println!("Total amount of images: {}", image_values.len());
+        let mut image_values = generate_image_filestream_colored(binary_data);
 
         let chunk_size = image_values.len() / THREADS;
         let remainder = image_values.len() % THREADS;
@@ -53,7 +52,7 @@ fn main() {
             let thread_handle = thread::spawn(move || {
                 for (idx, value) in values_chunk.iter().enumerate() {
                     let image_index = start + idx;
-                    imgedit::create_image(*value, image_index);
+                    imgedit::create_image_colored(*value, image_index);
                 }
             });
 
@@ -70,6 +69,7 @@ fn main() {
         // for i in 0..image_values.len() {
         //     imgedit::create_image_colored(image_values[i], i);
         // }
+        println!("Total amount of images: {}", image_values.len());
     }
 
     let elapsed = now.elapsed();
