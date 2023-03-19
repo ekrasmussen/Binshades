@@ -2,6 +2,7 @@ extern crate image;
 
 mod imgedit;
 use image::{ImageBuffer};
+use image::Rgb;
 use std::env;
 use std::fs::File;
 use std::io::Read;
@@ -34,7 +35,7 @@ fn main() {
             }
         };
 
-        let mut image_values = generate_image_filestream(binary_data);
+        let mut image_values = generate_image_filestream_colored(binary_data);
         println!("Total amount of images: {}", image_values.len());
 
         let chunk_size = image_values.len() / THREADS;
@@ -53,7 +54,8 @@ fn main() {
             let thread_handle = thread::spawn(move || {
                 for (idx, value) in values_chunk.iter().enumerate() {
                     let image_index = start + idx;
-                    imgedit::create_image(*value, image_index);
+                    let mut image: ImageBuffer <Rgb<u8>, Vec<u8>> = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
+                    imgedit::create_image_colored(*value, image_index, &mut image);
                 }
             });
 

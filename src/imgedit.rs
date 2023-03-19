@@ -1,7 +1,7 @@
 use image::{ImageBuffer};
 use std::fs::create_dir_all;
 use std::path::Path;
-
+use image::Rgb;
 
 const WIDTH: usize = 1920;
 const HEIGHT: usize = 1080;
@@ -9,18 +9,6 @@ const BLOCK_SIZE: usize = 12;
 
 const GRIDX: usize = WIDTH / BLOCK_SIZE;
 const GRIDY: usize = HEIGHT / BLOCK_SIZE;
-
-pub fn fill_image(mut image: ImageBuffer<image::Luma<u8>, Vec<u8>>, color: image::Luma<u8>) -> ImageBuffer<image::Luma<u8>, Vec<u8>> {
-    let (width, height) = image.dimensions();
-
-    for i in 0..width {
-        for j in 0..height {
-            image.put_pixel(i, j, color);
-        }
-    }
-
-    image
-}
 
 pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
 {
@@ -50,7 +38,7 @@ pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
     image.save(&image_path).unwrap();
 }
 
-pub fn create_image_colored(colors: [[[u8; 3]; GRIDY]; GRIDX], id: usize) {
+pub fn create_image_colored(colors: [[[u8; 3]; GRIDY]; GRIDX], id: usize, image: &mut ImageBuffer<Rgb<u8>, Vec<u8>>) {
     //Create the subdirectory
     let dir_path = Path::new("output");
     create_dir_all(dir_path);
