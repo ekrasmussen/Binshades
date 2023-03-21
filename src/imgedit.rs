@@ -22,6 +22,63 @@ pub fn fill_image(mut image: ImageBuffer<image::Luma<u8>, Vec<u8>>, color: image
     image
 }
 
+pub fn generate_image_filestream(mut data: Vec<u8>) -> Vec<[[u8; GRIDY]; GRIDX]> {
+    let mut arrays = Vec::new();
+    let mut index = 0;
+    while index < data.len() {
+        let mut array = [[255; GRIDY]; GRIDX];
+        for y in 0..GRIDY {
+            for x in 0..GRIDX {
+                if index < data.len() {
+                    array[x][y] = data[index];
+                    index += 1;
+                } else {
+                    for y in y..GRIDY {
+                        for x in x..GRIDX {
+                            array[x][y] = 255;
+                        }
+                    }
+                    arrays.push(array);
+                    return arrays;
+                }
+            }
+        }
+        arrays.push(array);
+    }
+    arrays
+}
+
+pub fn generate_image_filestream_colored(mut data: Vec<u8>) -> Vec<[[[u8; 3]; GRIDY]; GRIDX]> {
+    let mut arrays = Vec::new();
+    let mut index = 0;
+    while index < data.len() {
+        let mut array = [[[255; 3]; GRIDY]; GRIDX];
+        for y in 0..GRIDY {
+            for x in 0..GRIDX {
+                for c in 0..3 {
+                    if index < data.len() {
+                        array[x][y][c] = data[index];
+                        index += 1;
+                    } else {
+                        for y in y..GRIDY {
+                            for x in x..GRIDX {
+                                for c in c..3 {
+                                    array[x][y][c] = 255;
+                                }
+                            }
+                        }
+
+                        arrays.push(array);
+                        return arrays;
+                    }
+                }
+            }
+        }
+        arrays.push(array);
+    }
+    arrays
+}
+
 pub fn create_image(colors: [[u8; GRIDY]; GRIDX], id: usize)
 {
     //Create the subdirectory

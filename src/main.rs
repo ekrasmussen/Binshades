@@ -22,6 +22,13 @@ const GRIDY: usize = HEIGHT / BLOCK_SIZE;
 fn main() {
     let now = Instant::now();
     let args: Vec<String> = env::args().collect();
+
+    if args[1] == "test" {
+        let test_files = vec!["50KB.bin", "100KB.bin", "250KB.bin", "500KB.bin", "750KB.bin", "1MB.bin", "2MB.bin", "4MB.bin", "5MB.bin", "10MB.bin", "20MB.bin", "40MB.bin", "50MB.bin", "100MB.bin", "250MB.bin", "500MB.bin" "1GB.bin"];
+
+
+    }
+
     for i in 1..args.len() {
         println!("File: {}", args[i]);
 
@@ -34,7 +41,7 @@ fn main() {
             }
         };
 
-        let mut image_values = generate_image_filestream_colored(binary_data);
+        let mut image_values = imgedit::generate_image_filestream_colored(binary_data);
 
         let chunk_size = image_values.len() / THREADS;
         let remainder = image_values.len() % THREADS;
@@ -90,63 +97,6 @@ fn convert_to_text(path: &str, data: &[u8]) -> Result<(), std::io::Error> {
     let mut file = File::create(path)?;
     file.write_all(data)?;
     Ok(())
-}
-
-fn generate_image_filestream(mut data: Vec<u8>) -> Vec<[[u8; GRIDY]; GRIDX]> {
-    let mut arrays = Vec::new();
-    let mut index = 0;
-    while index < data.len() {
-        let mut array = [[255; GRIDY]; GRIDX];
-        for y in 0..GRIDY {
-            for x in 0..GRIDX {
-                if index < data.len() {
-                    array[x][y] = data[index];
-                    index += 1;
-                } else {
-                    for y in y..GRIDY {
-                        for x in x..GRIDX {
-                            array[x][y] = 255;
-                        }
-                    }
-                    arrays.push(array);
-                    return arrays;
-                }
-            }
-        }
-        arrays.push(array);
-    }
-    arrays
-}
-
-fn generate_image_filestream_colored(mut data: Vec<u8>) -> Vec<[[[u8; 3]; GRIDY]; GRIDX]> {
-    let mut arrays = Vec::new();
-    let mut index = 0;
-    while index < data.len() {
-        let mut array = [[[255; 3]; GRIDY]; GRIDX];
-        for y in 0..GRIDY {
-            for x in 0..GRIDX {
-                for c in 0..3 {
-                    if index < data.len() {
-                        array[x][y][c] = data[index];
-                        index += 1;
-                    } else {
-                        for y in y..GRIDY {
-                            for x in x..GRIDX {
-                                for c in c..3 {
-                                    array[x][y][c] = 255;
-                                }
-                            }
-                        }
-
-                        arrays.push(array);
-                        return arrays;
-                    }
-                }
-            }
-        }
-        arrays.push(array);
-    }
-    arrays
 }
 
 fn print_image_as_text(array: &[[u8; GRIDY]; GRIDX]) {
