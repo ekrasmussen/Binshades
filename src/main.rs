@@ -71,7 +71,6 @@ fn main() {
         // }
         println!("Total amount of images: {}", image_values.len());
     }
-
     let elapsed = now.elapsed();
     println!("Elapsed: {:.2?}", elapsed);
 }
