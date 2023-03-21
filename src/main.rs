@@ -28,7 +28,7 @@ fn main() {
         benchmarking::create_log_entry();
         let time_now = Instant::now();
         for i in 0..test_files.len() {
-            for i in 0..EPOCHS {
+            for j in 0..EPOCHS {
                 let now = Instant::now();
             
                 println!("Converting file to vector filestream...");
