@@ -23,14 +23,14 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args[1] == "test" {
-        for i in 0..EPOCHS {
-            let test_files = vec!["50KB.bin", "100KB.bin", "250KB.bin", "500KB.bin", "750KB.bin", "1MB.bin", "2MB.bin", "4MB.bin", "5MB.bin", "10MB.bin", "20MB.bin", "40MB.bin", "50MB.bin", "100MB.bin", "250MB.bin", "500MB.bin", "1GB.bin"];
+        let test_files = vec!["50KB.bin", "100KB.bin", "250KB.bin", "500KB.bin", "750KB.bin", "1MB.bin", "2MB.bin", "4MB.bin", "5MB.bin", "10MB.bin", "20MB.bin", "40MB.bin", "50MB.bin", "100MB.bin", "250MB.bin", "500MB.bin", "1GB.bin"];
 
-            benchmarking::create_log_entry();
-            let time_now = Instant::now();
-            for i in 0..test_files.len() {
+        benchmarking::create_log_entry();
+        let time_now = Instant::now();
+        for i in 0..test_files.len() {
+            for i in 0..EPOCHS {
                 let now = Instant::now();
-                
+            
                 println!("Converting file to vector filestream...");
                 
                 let color_values = file_to_image(test_files[i]);
@@ -48,9 +48,9 @@ fn main() {
                 benchmarking::add_benchmark(test_files[i], after_filestream, after_images, total);
                 delete_directory("output");
             }
-    
-            benchmarking::finalize_log(time_now.elapsed());
         }
+
+        benchmarking::finalize_log(time_now.elapsed());
     }
     else {
         for i in 1..args.len() {
